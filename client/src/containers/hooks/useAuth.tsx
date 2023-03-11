@@ -12,8 +12,10 @@ export const useAuth = () => {
     }
 
     const UserLogout = ():void => {
+        navigate(PATH_NAME.Login)
         localStorage.clear()
-        client.resetStore().then(()=>{navigate(PATH_NAME.Login)})
+        client.resetStore()
+        // .then(()=>{navigate(PATH_NAME.Login)})
     };
 
     const UserLogin = async ():Promise<void> => {
