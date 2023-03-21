@@ -4,11 +4,12 @@ import env from "ts-react-dotenv"
 import { nanoid } from 'nanoid';
 import { LOCAL_STORAGE_KEY, PATH_NAME } from "../enums";
 import { useAuth } from "./hooks/useAuth";
+import LoginPage from "../components/LoginPage";
 export const Login = () => {
     const { UserLogin } = useAuth()
     const client_id = env.CLIENT_ID
     const redirect_uri = env.REDIRECT_URL
-    const authUrl = `https://github.com/login/oauth/authorize?scope=user repo&client_id=${client_id}&redirect_uri=${redirect_uri}`
+    const authUrl = `https://github.com/login/oauth/authorize?scope=user repo&client_id=${client_id}&redirect_uri=${redirect_uri}&prompt=select_account`
     console.log("render")
     
     const url = window.location.href;
@@ -24,9 +25,6 @@ export const Login = () => {
     //     }
     // }, [])
     return (
-        <>
-            <div>Login</div>
-            <Button type="default" href={authUrl}>go Login</Button>
-        </>
+        <LoginPage/>
     )
 }

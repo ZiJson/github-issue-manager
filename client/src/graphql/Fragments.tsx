@@ -5,6 +5,7 @@ export const USER_INFO = `
     id
     name
     login
+    url
   }
 `;
 
@@ -17,6 +18,7 @@ export const REPO_INFO = `
     name
     nameWithOwner
     url
+    
   }
 `
 
@@ -28,6 +30,18 @@ export const ISSUE_INFO = `
     body
     bodyHTML
     url
+    repository {
+      nameWithOwner
+      id
+    }
+    labels(first: 10){
+      nodes {
+        name
+        id 
+        color
+        
+      }
+    }
   }
 `
 
@@ -35,5 +49,13 @@ export const PAGE_CURSOR = `
   fragment PageCursor on PageInfo {
     hasNextPage
     endCursor
+  }
+`
+
+export const LABEL = `
+  fragment Label on Label {
+    id
+    color 
+    name
   }
 `

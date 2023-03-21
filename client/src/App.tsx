@@ -4,6 +4,9 @@ import './App.css';
 import { createBrowserRouter, RouterProvider, } from "react-router-dom";
 import { Home, Login, ForceLogin } from './containers';
 import { PATH_NAME } from './enums';
+import { ConfigProvider } from 'antd';
+import Theme from './theme';
+import styled from 'styled-components';
 function App() {
   const router = createBrowserRouter([
     {
@@ -15,11 +18,27 @@ function App() {
       element: <Login />
     }
   ]);
+  const Screen = styled.div`
+    width : 500px;
+    height : 370px;
+    margin : auto;
+    margin-top : 60px;
+    background : #dbe9ee;
+    border-radius : 20px;
+    border : solid 10px #c0d6df;
+    padding :10px 30px;
+`
   return (
-    <RouterProvider
-      router={router}
-    />
+    <ConfigProvider theme={Theme}
+    >
+      <Screen>
+        <RouterProvider
+          router={router}
+        />
+      </Screen>
+    </ConfigProvider>
   );
 }
+
 
 export default App;
