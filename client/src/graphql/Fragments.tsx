@@ -12,7 +12,7 @@ export const USER_INFO = `
 export const REPO_INFO = `
   fragment RepoInfo on Repository {
     id
-    issues {
+    issues(states: OPEN) {
       totalCount
     }
     name

@@ -5,7 +5,7 @@ export const GET_LABELS = gql`
         search(query: $searchQuery, type: REPOSITORY, first: 1) {
         nodes {
             ... on Repository {
-            labels(first: 10, query: "Open Progress Done") {
+            labels(first: 10, query: "Open In_Progress Done") {
                 nodes {
                     color
                     id

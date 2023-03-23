@@ -1,18 +1,23 @@
 import React, { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { LOCAL_STORAGE_KEY, PATH_NAME } from "../enums";
+import { PATH_NAME } from "../constant";
 import { useAuth } from "./hooks/useAuth";
-export const ForceLogin = ({ child }: { child: React.ReactNode }) => {
+import { message } from "antd";
+const ForceLogin = ({ child }: { child: React.ReactNode }) => {
     const navigate = useNavigate();
-    const {isLogin} = useAuth()
+    const { isLogin } = useAuth()
+    
     useEffect(() => {
         if (!isLogin()) {
-            console.log("you have to login")
+            console.log("you have to login your GitHub")
+            message.warning("you have to login your GitHub")
             navigate(PATH_NAME.Login)
         }
-    },[])
+    }, [])
 
     return (
         <>{child}</>
     )
 }
+
+export default ForceLogin

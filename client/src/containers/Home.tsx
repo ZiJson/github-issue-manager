@@ -1,17 +1,17 @@
-import React, { useState, useRef } from "react";
-import { Button, Typography, Divider, List, Skeleton, Avatar, Modal, Select, Tag } from "antd";
+import { Button, Typography, Divider, List, Skeleton, Tooltip, Select, Tag, Space } from "antd";
+import { SwapLeftOutlined, VerticalAlignTopOutlined, AppstoreAddOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAuth, useHome } from "./hooks";
-import { useQuery, useLazyQuery } from "@apollo/client";
-import { GET_USER } from "../graphql/queries";
-import { USER, REPO, ISSUE, ShowType } from "./hooks/useHome";
-import styled from "styled-components";
+import { Loading } from "../components/Loading";
+import { REPO, ISSUE, ShowType } from "../constant";
 import IssueModel from "../components/IssueModel";
+import style from "./containers.module.css"
 
-export const Home = () => {
+const Home = () => {
     const { UserLogout } = useAuth()
-    const { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, createLabel, refetchIssues, OncreateIssue, labels} = useHome()
-    if (queryUser.loading) return <div>loading</div>
+    const { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels } = useHome()
+    if (queryUser.loading) return <Loading />
+
     console.log("Home render")
     // console.log("repos:",repos)
     // console.log("issues:", issues)
@@ -19,47 +19,48 @@ export const Home = () => {
     const loadData = () => {
         State === ShowType.reposList ? getMoreRepos() : getMoreIssues(issues.repo)
     }
-    const onRepoClick = (e: any) => {
-        getMoreIssues(e.target.id)
+    const onRepoClick = async (e: any) => {
+        await getMoreIssues(e.target.id)
         scrollToTop()
     }
     const onIssueClick = (e: any) => {
         getIssueInfo(e.target.id)
     }
-    const StateFilter = (datas:ISSUE[]) => {
-        return datas.filter(data=>data.state==="OPEN")
+    const StateFilter = (datas: ISSUE[]) => {
+        return datas.filter(data => data.state === "OPEN")
     }
     return (
         <>
-            <Typography.Text strong>Hello <Typography.Link href={queryUser.data?.viewer.url} >{queryUser.data?.viewer.login}</Typography.Link> !</Typography.Text>
+            <div className={style.header}>
+                <Typography.Text strong>Hello <Typography.Link href={queryUser.data?.viewer.url} >{queryUser.data?.viewer.login}</Typography.Link> !</Typography.Text>
+                <Space>
+                    {State === ShowType.issuesList ?
+                        <>
+                            <Select
+                                size="small"
+                                labelInValue
+                                defaultValue={{ value: "all", label: "All" }}
+                                style={{ width: 120 }}
+                                onChange={handleFilter}
+                                options={[
+                                    { value: "All", label: "All" },
+                                    { value: "Open", label: 'Open' },
+                                    { value: 'In_Progress', label: 'In Progress' },
+                                    { value: 'Done', label: 'Done' },
+                                ]}
+                            />
+                        </> : ""}
+                    <Button type="primary" size="small" onClick={() => {
+                        UserLogout()
+                    }}>Logout</Button>
+                </Space>
+            </div>
 
-            <Button type="primary" onClick={() => {
-                UserLogout()
-            }}>Logout</Button>
-            {State === ShowType.issuesList ?
-                <>
-                    <Button onClick={() => goBack()}>Back</Button>
-                    <Select
-                        labelInValue
-                        defaultValue={{ value: "all", label: "All" }}
-                        style={{ width: 120 }}
-                        onChange={handleFilter}
-                        options={[
-                            { value: "All", label: "All" },
-                            { value: "Open", label: 'Open' },
-                            { value: 'In Progress', label: 'In Progress' },
-                            { value: 'Done', label: 'Done' },
-                        ]}
-                    />
-                </> : ""}
+
+
             <div
                 id="scrollableDiv"
-                style={{
-                    height: 300,
-                    overflow: 'auto',
-                    padding: '0 16px',
-                    // border: '1px solid rgba(140, 140, 140, 0.1)',
-                }}
+                className={style.scrollDiv}
             >
                 <InfiniteScroll
                     dataLength={dataList.datas.length}
@@ -80,7 +81,6 @@ export const Home = () => {
                                             title={<Typography.Text onClick={onRepoClick}><a id={item.nameWithOwner}>{item.name}</a></Typography.Text>}
                                             description={item.url}
                                         />
-                                        <div>Content</div>
                                     </List.Item>
                                 )}
                             />
@@ -102,22 +102,23 @@ export const Home = () => {
                         </>}
                 </InfiniteScroll>
             </div>
-            <IssueModel State={State} goBack={goBack} issue={issue as ISSUE} refetchIssue={refetchIssues} labels={labels}/>
-            <Button onClick={() => scrollToTop()}> to top</Button>
-            <Button onClick={() => OncreateIssue()}>create issue</Button>
-            <Button onClick={() => refetchIssues()}>refetch</Button>
-            {/* {displayUser(queryUser.data as USER)}
-                {repos.datas.map((repo, i) => (<Button type="text" key={i} onClick={onRepoClick}><div id={repo.nameWithOwner}>{repo.name}</div></Button>))}
-                <Button type="default" onClick={() => {
-                    getMoreRepos()
-                }}>getMoreRepos</Button>
-                <br></br>
-                issues:
-                {issues.datas.map((issue, i) => (
-                    <Button type="text" key={i} onClick={onIssueClick}><div id={issue.id}>{issue.title}</div></Button>
-                ))}
-                issue:
-                {issue?.title} */}
+            <IssueModel State={State} goBack={goBack} issue={issue as ISSUE} refetchIssue={refetchIssues} labels={labels} />
+            <div className={style.footer}>
+                <div>
+                    <Button onClick={() => goBack()} icon={<SwapLeftOutlined />} type="text" style={{ display: State === ShowType.reposList ? "none" : "" }}>return</Button>
+                </div>
+                <Space>
+                    <Tooltip title="create issue" placement="leftTop">
+                        <Button onClick={() => OncreateIssue()} icon={<AppstoreAddOutlined />} type="text" style={{ display: State === ShowType.reposList ? "none" : "" }}></Button>
+                    </Tooltip>
+                    <Tooltip title="top" placement="bottom">
+                        <Button onClick={() => scrollToTop()} icon={<VerticalAlignTopOutlined />} type="text"></Button>
+                    </Tooltip>
+                </Space>
+
+            </div>
         </>
     )
 }
+
+export default Home

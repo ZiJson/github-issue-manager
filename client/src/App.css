@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+@media only screen and (max-width: 600px)  {
+  body {
+    background-color: rgb(219, 233, 238);
+  }
+  .screen {
+    border :0 !important;
+    width: auto !important;
+    margin: 0 !important;
+  }
+}

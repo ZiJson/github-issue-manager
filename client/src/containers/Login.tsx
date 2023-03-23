@@ -1,11 +1,12 @@
-import { Button } from "antd"
+import { Spin } from "antd"
 import { useEffect } from "react";
 import env from "ts-react-dotenv"
 import { nanoid } from 'nanoid';
-import { LOCAL_STORAGE_KEY, PATH_NAME } from "../enums";
+import { LOCAL_STORAGE_KEY, PATH_NAME } from "../constant";
 import { useAuth } from "./hooks/useAuth";
 import LoginPage from "../components/LoginPage";
-export const Login = () => {
+import { Loading } from "../components/Loading";
+const Login = () => {
     const { UserLogin } = useAuth()
     const client_id = env.CLIENT_ID
     const redirect_uri = env.REDIRECT_URL
@@ -15,16 +16,11 @@ export const Login = () => {
     const url = window.location.href;
     if (url.includes("?code=")) {
         UserLogin()
-        return <div>loading</div>
+        return <Loading/>
         
     }
-    // useEffect(() => {
-    //     const url = window.location.href;
-    //     if (url.includes("?code=")) {
-    //         UserLogin()
-    //     }
-    // }, [])
     return (
         <LoginPage/>
     )
 }
+export default Login

@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ApolloClient, createHttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { LOCAL_STORAGE_KEY } from './enums';
+import { LOCAL_STORAGE_KEY } from './constant';
 
 const GITHUB_BASE_URL = 'https://api.github.com/graphql';
 

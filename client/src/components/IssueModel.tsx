@@ -1,14 +1,11 @@
 import { Modal, Tag, Space, Input, Switch, Button, Radio, Spin } from "antd";
-import { LABEL, ShowType } from "../containers/hooks/useHome";
-import { ISSUE } from "../containers/hooks/useHome";
+import { LABEL, ShowType, ISSUE } from "../constant";
 import parse from 'html-react-parser'
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Markdown from 'markdown-to-jsx';
 import { useMutation } from "@apollo/client";
 import { UPDATE_ISSUE } from "../graphql/mutations/UpdateIssue";
 import { CREATE_ISSUE } from "../graphql/mutations/CreateIssue";
-import Search from "antd/es/transfer/search";
-import { SEARCH } from "../graphql/queries";
 import { CLOSE_ISSUE } from "../graphql/mutations/CloseIssue";
 import type { RadioChangeEvent } from 'antd';
 import { ADD_LABEL, CHANGE_LABEL } from "../graphql/mutations/Label";
@@ -42,7 +39,7 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
         setCurrentLabel(current)
     }, [issue])
     if (!issue || !tempIssue) return <div></div>
-    console.log(tempIssue.title)
+    console.log("Model render")
 
     const onOK = async () => {
         if (onEdit) {
@@ -99,9 +96,7 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
     }
     const onChange = ({ target: { value } }: RadioChangeEvent) => {
         const pre = currentLabel
-        console.log(pre)
         const now = labels.find(label=>label.name===value)
-        console.log(pre?.name, now?.name)
         if (!now) return
         if (!pre) {
             addLabel({
@@ -128,12 +123,6 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
         }
 
     };
-    const getCurrentLabel = (): LABEL | undefined => {
-        const current = issue.labels.nodes.filter(label => (labels.map(la => la.name)).includes(label.name))
-        if (current.length === 0) return undefined
-        console.log(current)
-        return (current[0])
-    }
 
     return (
         <Modal
@@ -211,11 +200,11 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
                     }
                 </Space>
             </div>
-            {(!issue?.id && issue?.repository.id)?"":<StatusWrapper>
+            {(!issue?.id && issue?.repository.id)?"":onEdit?"":<StatusWrapper>
                 <Spin size="small" spinning={changeQuery.loading || addQuery.loading} style={{ marginRight: "5px" }} />
-                <Radio.Group defaultValue={current?.name} onChange={onChange} buttonStyle="solid" size="small" >
+                <Radio.Group defaultValue={current?.name} onChange={onChange} buttonStyle="solid" size="small" disabled={changeQuery.loading || addQuery.loading}>
                     <Radio.Button value="Open">Open</Radio.Button>
-                    <Radio.Button value="In Progress">In Progress</Radio.Button>
+                    <Radio.Button value="In_Progress">In Progress</Radio.Button>
                     <Radio.Button value="Done">Done</Radio.Button>
                 </Radio.Group>
             </StatusWrapper>}
@@ -230,4 +219,4 @@ const StatusWrapper = styled.div`
     top:20px;
     right:50px
 `
-export default IssueModel
+export default (IssueModel) 

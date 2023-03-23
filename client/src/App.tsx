@@ -1,12 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { createBrowserRouter, RouterProvider, } from "react-router-dom";
-import { Home, Login, ForceLogin } from './containers';
-import { PATH_NAME } from './enums';
+import { PATH_NAME } from './constant';
 import { ConfigProvider } from 'antd';
 import Theme from './theme';
 import styled from 'styled-components';
+import ForceLogin from './containers/ForceLogin';
+import Home from './containers/Home';
+import Login from './containers/Login';
 function App() {
   const router = createBrowserRouter([
     {
@@ -31,7 +32,7 @@ function App() {
   return (
     <ConfigProvider theme={Theme}
     >
-      <Screen>
+      <Screen className='screen'>
         <RouterProvider
           router={router}
         />

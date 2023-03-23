@@ -1,0 +1,25 @@
+.header {
+    height: 30px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer {
+    height: 30px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.scrollDiv {
+    border-radius: 10px;
+    height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 16px;
+    margin-bottom: 5px;
+    background:rgb(255 255 255 / 18%)
+}

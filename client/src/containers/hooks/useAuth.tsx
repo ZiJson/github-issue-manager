@@ -1,7 +1,7 @@
 import env from "ts-react-dotenv"
 import { useApolloClient } from "@apollo/client";
 import { nanoid } from 'nanoid';
-import { LOCAL_STORAGE_KEY, PATH_NAME } from "../../enums";
+import { LOCAL_STORAGE_KEY, PATH_NAME } from "../../constant";
 import { useNavigate } from "react-router-dom";
 export const useAuth = () => {
     const client = useApolloClient()
