@@ -9,7 +9,7 @@ import style from "./containers.module.css"
 
 const Home = () => {
     const { UserLogout } = useAuth()
-    const { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels } = useHome()
+    const { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels, SearchRepoByName, onSearch } = useHome()
     if (queryUser.loading) return <Loading />
 
     console.log("Home render")
@@ -105,7 +105,7 @@ const Home = () => {
             <IssueModel State={State} goBack={goBack} issue={issue as ISSUE} refetchIssue={refetchIssues} labels={labels} />
             <div className={style.footer}>
                 <div>
-                    <Button onClick={() => goBack()} icon={<SwapLeftOutlined />} type="text" style={{ display: State === ShowType.reposList ? "none" : "" }}>return</Button>
+                    <Button onClick={() => goBack()} icon={<SwapLeftOutlined />} type="text" style={{ display: onSearch?"": State === ShowType.reposList ? "none" : "" }}>return</Button>
                 </div>
                 <Space>
                     <Tooltip title="create issue" placement="leftTop">
@@ -114,6 +114,7 @@ const Home = () => {
                     <Tooltip title="top" placement="bottom">
                         <Button onClick={() => scrollToTop()} icon={<VerticalAlignTopOutlined />} type="text">top</Button>
                     </Tooltip>
+                    <Button onClick={()=>{SearchRepoByName("web")}}>test</Button>
                 </Space>
 
             </div>

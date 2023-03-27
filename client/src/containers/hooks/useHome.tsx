@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
-import { GET_REPOS, GET_USER, SEARCH } from "../../graphql/queries";
+import { GET_REPOS, GET_USER, SEARCH, SEARCHREPO } from "../../graphql/queries";
 import { PageInfo, User, Maybe } from "../../__generated__/graphql";
 import { CREATE_LABEL } from "../../graphql/mutations/Label";
 import { GET_LABELS } from "../../graphql/queries/GetLabels";
 import { useApolloClient } from "@apollo/client";
-import { REPO,ISSUE,LABEL,ShowType, LabelColor,USER } from "../../constant";
+import { REPO, ISSUE, LABEL, ShowType, LabelColor, USER } from "../../constant";
 
 export const useHome = () => {
     const [repos, setRepos] = useState<{ datas: REPO[], cursor: Maybe<string> | undefined, type: "repos" }>({ datas: [], cursor: null, type: "repos" })
-    const [issues, setIssues] = useState<{ datas: ISSUE[], repo: string, cursor: Maybe<string> | undefined, filter: string, type: "issues", loaded:boolean }>({ datas: [], cursor: null, repo: "", type: "issues", filter: "All",loaded:false })
+    const [issues, setIssues] = useState<{ datas: ISSUE[], repo: string, cursor: Maybe<string> | undefined, filter: string, type: "issues", loaded: boolean }>({ datas: [], cursor: null, repo: "", type: "issues", filter: "All", loaded: false })
     const [issue, setIssue] = useState<ISSUE | undefined>()
     const [labels, setLabels] = useState<LABEL[]>([])
+    const [onSearch, setOnSearch] = useState(false)
     const client = useApolloClient()
     useEffect(() => {
         scrollToTop()
@@ -47,6 +48,24 @@ export const useHome = () => {
             })
         })
     }
+
+    const SearchRepoByName = (name: string, org?: string) => {
+        const query = `${name} in:name user:${queryUser.data?.viewer.login} `
+        client.query({
+            query: SEARCHREPO,
+            variables: { query }
+        }).then(res=>{
+            const data = res.data
+            setRepos({
+                ...repos,
+                datas: data.search.nodes,
+                cursor: data.search.pageInfo.hasNextPage ? data.search.pageInfo.endCursor : null
+            })
+            setOnSearch(true)
+            
+        })
+    }
+
     const getMoreIssues = async (repoWithOwner: string) => {
         if (issues.datas.length > 0 && !issues.cursor) {
             console.log("No issue more")
@@ -66,13 +85,15 @@ export const useHome = () => {
                 repo: repoWithOwner,
                 datas: [...issues.datas, ...res.data.search.nodes],
                 cursor: res.data.search.pageInfo.hasNextPage ? res.data.search.pageInfo.endCursor : null,
-                loaded:true
+                loaded: true
             })
         })
         if (issues.repo !== repoWithOwner) {
             await hanedleLabel(repoWithOwner)
         }
     }
+
+
     const getIssueInfo = (id: string) => {
         if (id === issue?.id) {
             return
@@ -83,11 +104,25 @@ export const useHome = () => {
     }
     const goBack = () => {
         if (State === ShowType.issuesList) {
-            setIssues({ ...issues, datas: [], cursor: null, type: "issues", filter: "All",loaded:false })
+            setIssues({ ...issues, datas: [], cursor: null, type: "issues", filter: "All", loaded: false })
             scrollToTop()
         }
         else if (State === ShowType.issueInfo) {
             setIssue(undefined)
+        }
+        else if (State === ShowType.reposList && onSearch) {
+            client.query({
+                query:GET_REPOS,
+                variables:{cursor:null}
+            }).then(res=>{
+                const data = res.data
+                setRepos({
+                    ...repos,
+                    datas: data.viewer.repositories.nodes,
+                    cursor: data.viewer.repositories.pageInfo.hasNextPage ? data.viewer.repositories.pageInfo.endCursor : null
+                })
+                setOnSearch(false)
+            })
         }
     }
     const scrollToTop = () => {
@@ -102,7 +137,7 @@ export const useHome = () => {
             console.log(filter)
             const query = `repo:${issues.repo} is:issue ${filter === 'All' ? "" : "label:" + filter}`
             client.query({
-                query:SEARCH,
+                query: SEARCH,
                 variables: {
                     query,
                     issueCursor: null
@@ -134,7 +169,7 @@ export const useHome = () => {
     const refetchIssues = async () => {
         const query = `repo:${issues.repo} is:issue is:open ${issues.filter === 'All' ? "" : "label:" + issues.filter}`
         client.query({
-            query:SEARCH,
+            query: SEARCH,
             variables: {
                 query,
                 issueCursor: null
@@ -163,5 +198,5 @@ export const useHome = () => {
         })
     }
     const State = issue?.repository.nameWithOwner ? ShowType.issueInfo : issues.loaded ? ShowType.issuesList : ShowType.reposList
-    return { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels }
+    return { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels, SearchRepoByName, onSearch }
 }
