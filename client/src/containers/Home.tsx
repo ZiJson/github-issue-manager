@@ -109,10 +109,10 @@ const Home = () => {
                 </div>
                 <Space>
                     <Tooltip title="create issue" placement="leftTop">
-                        <Button onClick={() => OncreateIssue()} icon={<AppstoreAddOutlined />} type="text" style={{ display: State === ShowType.reposList ? "none" : "" }}></Button>
+                        <Button onClick={() => OncreateIssue()} icon={<AppstoreAddOutlined />} type="text" style={{ display: State === ShowType.reposList ? "none" : "" }}>new</Button>
                     </Tooltip>
                     <Tooltip title="top" placement="bottom">
-                        <Button onClick={() => scrollToTop()} icon={<VerticalAlignTopOutlined />} type="text"></Button>
+                        <Button onClick={() => scrollToTop()} icon={<VerticalAlignTopOutlined />} type="text">top</Button>
                     </Tooltip>
                 </Space>
 
