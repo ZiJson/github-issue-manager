@@ -24,7 +24,7 @@ export const useAuth = () => {
         const client_secret = env.CLIENT_SECRET
 
         const code = (url.split("?code="))[1];
-        const getTokenUrl = `http://localhost:4000/authenticate`
+        const getTokenUrl = env.PROXY_SERVER
         const body = JSON.stringify({
             client_id,
             client_secret,
