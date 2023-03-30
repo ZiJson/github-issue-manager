@@ -13,7 +13,7 @@ const Login = () => {
     const authUrl = `https://github.com/login/oauth/authorize?scope=user repo&client_id=${client_id}&redirect_uri=${redirect_uri}&prompt=select_account`
     console.log("render")
     console.log(process.env.PROXY_SERVER)
-    
+    console.log(env.CLIENT_ID)
     const url = window.location.href;
     if (url.includes("?code=")) {
         UserLogin()
