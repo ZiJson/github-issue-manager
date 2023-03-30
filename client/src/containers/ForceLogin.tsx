@@ -13,6 +13,7 @@ const ForceLogin = ({ child }: { child: React.ReactNode }) => {
             message.warning("you have to login your GitHub")
             navigate(PATH_NAME.Login)
         }
+        console.log("you are login !")
     }, [])
 
     return (

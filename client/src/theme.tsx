@@ -6,7 +6,7 @@ const Theme = {
         colorText:'#002f3e',
         colorLink:'#024f68',
         colorLinkHover:"#108bb3",
-        fontSize : 14
+        fontSize : 15
     }
 }
 

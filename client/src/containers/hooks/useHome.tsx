@@ -5,7 +5,9 @@ import { PageInfo, User, Maybe } from "../../__generated__/graphql";
 import { CREATE_LABEL } from "../../graphql/mutations/Label";
 import { GET_LABELS } from "../../graphql/queries/GetLabels";
 import { useApolloClient } from "@apollo/client";
-import { REPO, ISSUE, LABEL, ShowType, LabelColor, USER } from "../../constant";
+import { REPO, ISSUE, LABEL, ShowType, LabelColor, USER, PATH_NAME } from "../../constant";
+import { useNavigate } from "react-router-dom";
+
 
 export const useHome = () => {
     const [repos, setRepos] = useState<{ datas: REPO[], cursor: Maybe<string> | undefined, type: "repos" }>({ datas: [], cursor: null, type: "repos" })
@@ -14,6 +16,7 @@ export const useHome = () => {
     const [labels, setLabels] = useState<LABEL[]>([])
     const [onSearch, setOnSearch] = useState(false)
     const client = useApolloClient()
+    const navigate = useNavigate();
     useEffect(() => {
         scrollToTop()
     }, [issues.repo])
@@ -26,6 +29,10 @@ export const useHome = () => {
             }
             setRepos(init)
 
+        },
+        onError(error) {
+            navigate(PATH_NAME.Login)
+            throw error.message
         },
     })
     const getMoreRepos = async () => {
@@ -135,7 +142,7 @@ export const useHome = () => {
         if (issues.filter !== value.value) {
             const filter = value.value
             console.log(filter)
-            const query = `repo:${issues.repo} is:issue ${filter === 'All' ? "" : "label:" + filter}`
+            const query = `repo:${issues.repo} is:issue is:open ${filter === 'All' ? "" : "label:" + filter}`
             client.query({
                 query: SEARCH,
                 variables: {
@@ -143,6 +150,7 @@ export const useHome = () => {
                     issueCursor: null
                 }
             }).then((res) => {
+                console.log(res.data)
                 setIssues({
                     ...issues,
                     filter: value.value,

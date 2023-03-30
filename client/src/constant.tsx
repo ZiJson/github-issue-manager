@@ -22,6 +22,7 @@ export type ISSUE = {
     state?: string
     body?: string
     bodyHTML?: string
+    url?: string
     repository: {
         nameWithOwner: string
         id: string

@@ -93,7 +93,7 @@ const Home = () => {
                                     <List.Item key={item.id}>
                                         <List.Item.Meta
                                             title={<Typography.Text onClick={onIssueClick} ><a id={item.id}>{item.title}</a></Typography.Text>}
-                                            description={item.state}
+                                            description={item.url}
                                         />
                                         {item.labels.nodes.map(label => (<Tag key={label.id} color={"#" + label.color}>{label.name}</Tag>))}
                                     </List.Item>

@@ -1,4 +1,4 @@
-import { Modal, Tag, Space, Input, Switch, Button, Radio, Spin } from "antd";
+import { Modal, Tag, Space, Input, Switch, Button, Radio, Spin, Typography } from "antd";
 import { LABEL, ShowType, ISSUE } from "../constant";
 import parse from 'html-react-parser'
 import { useState, useEffect } from "react";
@@ -128,7 +128,13 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
         <Modal
             forceRender={true}
             centered
-            title={!onEdit ? tempIssue?.title : <Input value={tempIssue?.title} style={{ width: "300px" }} onChange={e => setTempIssue({ ...tempIssue, title: e.target.value })} placeholder="Title" />}
+            title={!onEdit ? 
+                <div style={{width:"200px"}}>
+                    <Typography.Text style={{fontSize:"16px "}} ellipsis>
+                        {tempIssue.title}
+                    </Typography.Text>
+                </div>
+                : <Input value={tempIssue?.title} style={{ width: "300px" }} onChange={e => setTempIssue({ ...tempIssue, title: e.target.value })} placeholder="Title" />}
             open={State === ShowType.issueInfo}
             onOk={onOK}
             onCancel={onCancel}
@@ -166,7 +172,7 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
                     {
                         !onEdit ?
                             <div>
-                                <div style={{ maxHeight: "400px", overflowY: "scroll", width: "450px" }}>{tempIssue?.bodyHTML ? parse(tempIssue?.bodyHTML) : ""}</div>
+                                <div style={{ maxHeight: "400px", overflow: "scroll", width: "450px" }}>{tempIssue?.bodyHTML ? parse(tempIssue?.bodyHTML) : ""}</div>
                             </div>
                             :
                             <>
