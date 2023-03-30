@@ -27,7 +27,7 @@
   "scripts": {
     "start": "react-dotenv && react-scripts start ",
     "server-build": "npx tsc ./server/index.ts",
-    "build": "react-scripts build",
+    "build": "react-dotenv && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "compile": "graphql-codegen",
