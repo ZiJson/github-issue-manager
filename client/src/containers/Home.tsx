@@ -1,5 +1,5 @@
-import { Button, Typography, Divider, List, Skeleton, Tooltip, Select, Tag, Space } from "antd";
-import { SwapLeftOutlined, VerticalAlignTopOutlined, AppstoreAddOutlined } from '@ant-design/icons';
+import { Button, Typography, Divider, List, Skeleton, Tooltip, Select, Tag, Space, Input, message } from "antd";
+import { SwapLeftOutlined, VerticalAlignTopOutlined, AppstoreAddOutlined ,ArrowUpOutlined ,ArrowDownOutlined} from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAuth, useHome } from "./hooks";
 import { Loading } from "../components/Loading";
@@ -9,7 +9,7 @@ import style from "./containers.module.css"
 
 const Home = () => {
     const { UserLogout } = useAuth()
-    const { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels, SearchRepoByName, onSearch } = useHome()
+    const { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels, SearchByContent, onSearch, searchLoading, sortDirect, setSortDirect, setSearchInput } = useHome()
     if (queryUser.loading) return <Loading />
 
     console.log("Home render")
@@ -29,12 +29,19 @@ const Home = () => {
     const StateFilter = (datas: ISSUE[]) => {
         return datas.filter(data => data.state === "OPEN")
     }
+    const onSearchEnter = (value: string) => {
+        if (!value) {
+            message.warning("Hey! Type anything!")
+            return
+        }
+        setSearchInput(value)
+    }
     return (
         <>
             <div className={style.header}>
                 <Typography.Text strong>Hello <Typography.Link href={queryUser.data?.viewer.url} >{queryUser.data?.viewer.login}</Typography.Link> !</Typography.Text>
                 <Space>
-                    {State === ShowType.issuesList ?
+                    {(State === ShowType.issuesList || State === ShowType.issueInfo) && !onSearch ?
                         <>
                             <Select
                                 size="small"
@@ -50,6 +57,10 @@ const Home = () => {
                                 ]}
                             />
                         </> : ""}
+                    <Input.Search placeholder="input search text" style={{ width: 150 }} size="small" onSearch={onSearchEnter} loading={searchLoading}></Input.Search>
+                    <Tooltip title={sortDirect==="ASC"?"start from old":"start from new"}>
+                    <Button type="text" size="small" onClick={()=>{setSortDirect(sortDirect==="ASC"?"DESC":"ASC")}} icon={<ArrowDownOutlined />}><sup style={{fontWeight:"600"}}>{sortDirect==="ASC"?"O":"N"}</sup></Button>
+                    </Tooltip>
                     <Button type="primary" size="small" onClick={() => {
                         UserLogout()
                     }}>Logout</Button>
@@ -105,7 +116,7 @@ const Home = () => {
             <IssueModel State={State} goBack={goBack} issue={issue as ISSUE} refetchIssue={refetchIssues} labels={labels} />
             <div className={style.footer}>
                 <div>
-                    <Button onClick={() => goBack()} icon={<SwapLeftOutlined />} type="text" style={{ display: onSearch?"": State === ShowType.reposList ? "none" : "" }}>return</Button>
+                    <Button onClick={() => goBack()} icon={<SwapLeftOutlined />} type="text" style={{ display: onSearch ? "" : State === ShowType.reposList ? "none" : "" }}>return</Button>
                 </div>
                 <Space>
                     <Tooltip title="create issue" placement="leftTop">
@@ -114,7 +125,6 @@ const Home = () => {
                     <Tooltip title="top" placement="bottom">
                         <Button onClick={() => scrollToTop()} icon={<VerticalAlignTopOutlined />} type="text">top</Button>
                     </Tooltip>
-                    <Button onClick={()=>{SearchRepoByName("web")}}>test</Button>
                 </Space>
 
             </div>

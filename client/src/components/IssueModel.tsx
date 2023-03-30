@@ -1,4 +1,4 @@
-import { Modal, Tag, Space, Input, Switch, Button, Radio, Spin, Typography } from "antd";
+import { Modal, Tag, Space, Input, Switch, Button, Radio, Spin, Typography,message } from "antd";
 import { LABEL, ShowType, ISSUE } from "../constant";
 import parse from 'html-react-parser'
 import { useState, useEffect } from "react";
@@ -43,6 +43,15 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
 
     const onOK = async () => {
         if (onEdit) {
+            if(!tempIssue.title){
+                message.error("Title cannot be empty!")
+                return
+            }
+            if(!tempIssue?.body) return
+            if(tempIssue.body.length<30){
+                message.error("issue body must contain at least 30 words!")
+                return
+            }
             if (!issue.id) {
                 const OpenLabel = labels.find(label => label.name === "Open")
                 if (!OpenLabel) return
@@ -180,7 +189,7 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
                                     {
                                         !isPreview ?
                                             <Input.TextArea
-                                                value={tempIssue?.body}
+                                                // value={tempIssue?.body}
                                                 style={{ width: '100%' }}
                                                 autoSize={{ minRows: 10, maxRows: 13 }}
                                                 onChange={(e) => {
@@ -191,7 +200,9 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
                                                     })
                                                 }
                                                 }
+                                                defaultValue={tempIssue?.body}
                                                 placeholder="Write some content"
+                                                showCount
                                             />
                                             :
                                             <div style={{ minWidth: "40px", maxWidth: "400px", height: "261px" }}>

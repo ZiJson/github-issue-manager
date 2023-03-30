@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
-import { GET_REPOS, GET_USER, SEARCH, SEARCHREPO } from "../../graphql/queries";
+import { GET_REPOS, GET_USER, SEARCH } from "../../graphql/queries";
 import { PageInfo, User, Maybe } from "../../__generated__/graphql";
 import { CREATE_LABEL } from "../../graphql/mutations/Label";
 import { GET_LABELS } from "../../graphql/queries/GetLabels";
 import { useApolloClient } from "@apollo/client";
 import { REPO, ISSUE, LABEL, ShowType, LabelColor, USER, PATH_NAME } from "../../constant";
 import { useNavigate } from "react-router-dom";
-
+import { type } from "@testing-library/user-event/dist/type";
 
 export const useHome = () => {
     const [repos, setRepos] = useState<{ datas: REPO[], cursor: Maybe<string> | undefined, type: "repos" }>({ datas: [], cursor: null, type: "repos" })
@@ -15,26 +15,41 @@ export const useHome = () => {
     const [issue, setIssue] = useState<ISSUE | undefined>()
     const [labels, setLabels] = useState<LABEL[]>([])
     const [onSearch, setOnSearch] = useState(false)
+    const [searchLoading, setSearchLoading] = useState(false)
+    const [sortDirect, setSortDirect] = useState("DESC")
+    const [searchInput, setSearchInput] = useState("")
     const client = useApolloClient()
     const navigate = useNavigate();
+
     useEffect(() => {
         scrollToTop()
     }, [issues.repo])
-    const queryUser = useQuery<USER>(GET_USER, {
-        onCompleted(data) {
-            const init = {
-                ...repos,
-                datas: data.viewer.repositories.nodes,
-                cursor: data.viewer.repositories.pageInfo.hasNextPage ? data.viewer.repositories.pageInfo.endCursor : null
-            }
-            setRepos(init)
 
-        },
+    useEffect(() => {
+        if (!sortDirect) return
+        if (State === ShowType.reposList) {
+            onSearch ? SearchByContent(searchInput, "REPOSITIRY") : refetchRepos()
+        }
+        else if (State === ShowType.issuesList) {
+            onSearch ? SearchByContent(searchInput, "ISSUE") : refetchIssues()
+        }
+        scrollToTop()
+    }, [sortDirect])
+
+    useEffect(() => {
+        if (!searchInput) return
+        const type = State === ShowType.reposList ? "REPOSITORY" : "ISSUE"
+        console.log("search")
+        SearchByContent(searchInput, type)
+    }, [searchInput])
+
+    const queryUser = useQuery<USER>(GET_USER, {
         onError(error) {
             navigate(PATH_NAME.Login)
             throw error.message
         },
     })
+
     const getMoreRepos = async () => {
         if (!repos.cursor) {
             console.log("No repo more")
@@ -43,7 +58,8 @@ export const useHome = () => {
         client.query({
             query: GET_REPOS,
             variables: {
-                cursor: repos.cursor
+                cursor: repos.cursor,
+                direction: sortDirect
             },
             fetchPolicy: "no-cache"
         }).then(res => {
@@ -56,20 +72,33 @@ export const useHome = () => {
         })
     }
 
-    const SearchRepoByName = (name: string, org?: string) => {
-        const query = `${name} in:name user:${queryUser.data?.viewer.login} `
-        client.query({
-            query: SEARCHREPO,
-            variables: { query }
-        }).then(res=>{
+    const SearchByContent = async (content: string, type: string) => {
+        setSearchLoading(true)
+        const query = type === "REPOSITORY" ? `${content} in:name user:${queryUser.data?.viewer.login} sort:created-${sortDirect}`
+            : `${content} in:title,body repo:${issues.repo} is:issue is:Open sort:created-${sortDirect}`
+        await client.query({
+            query: SEARCH,
+            variables: { query, type }
+        }).then(res => {
             const data = res.data
-            setRepos({
-                ...repos,
-                datas: data.search.nodes,
-                cursor: data.search.pageInfo.hasNextPage ? data.search.pageInfo.endCursor : null
-            })
+            if (type === "REPOSITORY") {
+                setRepos({
+                    ...repos,
+                    datas: data.search.nodes,
+                    cursor: data.search.pageInfo.hasNextPage ? data.search.pageInfo.endCursor : null
+                })
+            }
+            else {
+                setIssues({
+                    ...issues,
+                    datas: res.data.search.nodes,
+                    cursor: res.data.search.pageInfo.hasNextPage ? res.data.search.pageInfo.endCursor : null,
+                    loaded: true
+                })
+            }
+
             setOnSearch(true)
-            
+            setSearchLoading(false)
         })
     }
 
@@ -79,12 +108,13 @@ export const useHome = () => {
             return
         }
         const filter = issues.filter
-        const query = `repo:${repoWithOwner} is:issue is:open ${filter === 'All' ? "" : "label:" + filter}`
+        const query = `repo:${repoWithOwner} is:issue is:open ${filter === 'All' ? "" : "label:" + filter} sort:created-${sortDirect}`
         await client.query({
             query: SEARCH,
             variables: {
                 query,
-                issueCursor: issues.cursor
+                cursor: issues.cursor,
+                type: "ISSUE"
             },
         }).then((res) => {
             setIssues({
@@ -110,24 +140,22 @@ export const useHome = () => {
         setIssue(issueClicked)
     }
     const goBack = () => {
-        if (State === ShowType.issuesList) {
+        if (State === ShowType.issuesList && !onSearch) {
             setIssues({ ...issues, datas: [], cursor: null, type: "issues", filter: "All", loaded: false })
             scrollToTop()
+        }
+        else if (State === ShowType.issuesList && onSearch) {
+            refetchIssues(true).then(() =>{
+                setSearchInput("")
+                setOnSearch(false)
+            })
         }
         else if (State === ShowType.issueInfo) {
             setIssue(undefined)
         }
         else if (State === ShowType.reposList && onSearch) {
-            client.query({
-                query:GET_REPOS,
-                variables:{cursor:null}
-            }).then(res=>{
-                const data = res.data
-                setRepos({
-                    ...repos,
-                    datas: data.viewer.repositories.nodes,
-                    cursor: data.viewer.repositories.pageInfo.hasNextPage ? data.viewer.repositories.pageInfo.endCursor : null
-                })
+            refetchRepos().then(() => {
+                setSearchInput("")
                 setOnSearch(false)
             })
         }
@@ -142,12 +170,13 @@ export const useHome = () => {
         if (issues.filter !== value.value) {
             const filter = value.value
             console.log(filter)
-            const query = `repo:${issues.repo} is:issue is:open ${filter === 'All' ? "" : "label:" + filter}`
+            const query = `repo:${issues.repo} is:issue is:open ${filter === 'All' ? "" : "label:" + filter} sort:created-${sortDirect}`
             client.query({
                 query: SEARCH,
                 variables: {
                     query,
-                    issueCursor: null
+                    cursor: null,
+                    type: "ISSUE"
                 }
             }).then((res) => {
                 console.log(res.data)
@@ -174,17 +203,35 @@ export const useHome = () => {
         setLabels(labelsNeed)
     }
 
-    const refetchIssues = async () => {
-        const query = `repo:${issues.repo} is:issue is:open ${issues.filter === 'All' ? "" : "label:" + issues.filter}`
+    const refetchRepos = async () => {
+        client.query({
+            query: GET_REPOS,
+            variables: { cursor: null, direction: sortDirect }
+        }).then(res => {
+            const data = res.data
+            setRepos({
+                ...repos,
+                datas: data.viewer.repositories.nodes,
+                cursor: data.viewer.repositories.pageInfo.hasNextPage ? data.viewer.repositories.pageInfo.endCursor : null
+            })
+        })
+    }
+
+    const refetchIssues = async (force?:boolean) => {
+        if(onSearch&&!force){
+            SearchByContent(searchInput,"ISSUE")
+            return
+        }
+        const query = `repo:${issues.repo} is:issue is:open ${issues.filter === 'All' ? "" : "label:" + issues.filter} sort:created-${sortDirect}`
         client.query({
             query: SEARCH,
             variables: {
                 query,
-                issueCursor: null
+                cursor: null,
+                type: "ISSUE"
             },
             fetchPolicy: "network-only"
         }).then((res) => {
-            console.log(res.data)
             setIssues({
                 ...issues,
                 datas: res.data.search.nodes,
@@ -205,6 +252,7 @@ export const useHome = () => {
             }
         })
     }
+
     const State = issue?.repository.nameWithOwner ? ShowType.issueInfo : issues.loaded ? ShowType.issuesList : ShowType.reposList
-    return { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels, SearchRepoByName, onSearch }
+    return { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels, SearchByContent, onSearch, searchLoading, sortDirect, setSortDirect, setSearchInput }
 }

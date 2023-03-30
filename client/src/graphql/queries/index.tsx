@@ -1,5 +1,4 @@
 import { GET_REPOS } from "./GetRepos";
 import { GET_USER } from "./GetUser";
 import { SEARCH } from "./Search";
-import { SEARCHREPO } from "./SearchRepo";
-export { GET_REPOS, GET_USER, SEARCH, SEARCHREPO }
+export { GET_REPOS, GET_USER, SEARCH }
