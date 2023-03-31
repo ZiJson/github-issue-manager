@@ -19,9 +19,9 @@ app.post("/authenticate", (req, res) => {
   console.log(req.body)
 
   const data = JSON.stringify(req.body)
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Accept","application/json")
+  // var myHeaders = new Headers();
+  // myHeaders.append("Content-Type", "application/json");
+  // myHeaders.append("Accept","application/json")
   // Request to exchange code for an access token
   fetch(`https://github.com/login/oauth/access_token`, {
     method: "POST",
