@@ -25,7 +25,10 @@ app.post("/authenticate", (req, res) => {
   // Request to exchange code for an access token
   fetch(`https://github.com/login/oauth/access_token`, {
     method: "POST",
-    headers: myHeaders,
+    headers: {
+      'Content-Type':"application/json",
+      Accept:"application/json"
+    },
     body: data,
   })
     .then((response) => response.text())
