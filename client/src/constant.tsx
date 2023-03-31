@@ -4,7 +4,8 @@ export enum PATH_NAME {
 	Login = 'login'
 }
 export enum LOCAL_STORAGE_KEY {
-    token = "access_token"
+    token = "access_token",
+    state = "client_state"
 }
 
 export type REPO = {

@@ -7,23 +7,28 @@ export const useAuth = () => {
     const client = useApolloClient()
     const navigate = useNavigate()
 
-    const isLogin = ():boolean => {
-        return (localStorage.getItem(LOCAL_STORAGE_KEY.token)?true:false)
+    const isLogin = (): boolean => {
+        return (localStorage.getItem(LOCAL_STORAGE_KEY.token) ? true : false)
     }
 
-    const UserLogout = ():void => {
+    const UserLogout = (): void => {
         navigate(PATH_NAME.Login)
         localStorage.clear()
         client.resetStore()
         // .then(()=>{navigate(PATH_NAME.Login)})
     };
 
-    const UserLogin = async ():Promise<void> => {
+    const UserLogin = async (): Promise<void> => {
         const url = window.location.href;
         const client_id = env.CLIENT_ID
         const client_secret = env.CLIENT_SECRET
-
-        const code = (url.split("?code="))[1];
+        const code = (url.split("?code="))[1].split("&state=")[0];
+        const state = (url.split("&state="))[1]
+        const clientState = localStorage.getItem(LOCAL_STORAGE_KEY.state)
+        if (state !== clientState) {
+            console.log(state, clientState)
+            throw "the state is not correct, you might under attack, please log in again!"
+        }
         const getTokenUrl = env.PROXY_SERVER
         const body = JSON.stringify({
             client_id,
@@ -44,5 +49,13 @@ export const useAuth = () => {
             })
             .catch(error => { throw error })
     };
-    return {UserLogin, UserLogout, isLogin}
+
+    const createState = () => {
+        const clientState = localStorage.getItem(LOCAL_STORAGE_KEY.state)
+        console.log(clientState)
+        if (clientState) return
+        localStorage.setItem(LOCAL_STORAGE_KEY.state, nanoid())
+    }
+
+    return { UserLogin, UserLogout, isLogin, createState }
 }
