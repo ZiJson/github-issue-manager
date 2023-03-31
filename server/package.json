@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "npx tsc && node -v",
-    "start": "nodemon -q build/index.js",
+    "start": "nodemon -q index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

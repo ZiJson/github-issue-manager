@@ -1,18 +1,19 @@
-import express, { Express, Request, Response } from 'express';
+import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
+
 dotenv.config();
 
-const app: Express = express();
+const app= express();
 const port = process.env.PORT || 4000;
 app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: "text/*" }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (req, res) => {
   res.send('Express + TypeScript Server');
 });
 
