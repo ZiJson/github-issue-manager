@@ -186,7 +186,7 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
                             </div>
                             :
                             <>
-                                <div style={{ height: "320px", overflow: "scroll", width: "400px" }}>
+                                <div style={{ height: "320px", overflow: "scroll", width: "100%" , maxWidth:"450px" }}>
                                     {
                                         !isPreview ?
                                             <Input.TextArea
