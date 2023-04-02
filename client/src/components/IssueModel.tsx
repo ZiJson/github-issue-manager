@@ -10,6 +10,7 @@ import { CLOSE_ISSUE } from "../graphql/mutations/CloseIssue";
 import type { RadioChangeEvent } from 'antd';
 import { ADD_LABEL, CHANGE_LABEL } from "../graphql/mutations/Label";
 import styled from "styled-components";
+import style from "./components.module.css"
 interface prop {
     State: ShowType
     goBack: () => void
@@ -175,13 +176,13 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
             ]}
         >
 
-            <div style={{ minWidth: "400px", maxWidth: "600px" }}>
+            <div style={{  maxWidth: "600px" }}>
                 <Space direction="vertical" size="small" style={{ display: 'flex' }}>
                     <div>{tempIssue.labels?.nodes.map(label => (<Tag key={label.id} color={"#" + label.color}>{label.name}</Tag>))}</div>
                     {
                         !onEdit ?
                             <div>
-                                <div style={{ maxHeight: "400px", overflow: "scroll", width: "450px" }}>{tempIssue?.bodyHTML ? parse(tempIssue?.bodyHTML) : ""}</div>
+                                <div style={{ maxHeight: "400px", overflow: "scroll", width: "100%" , maxWidth:"450px" }}>{tempIssue?.bodyHTML ? parse(tempIssue?.bodyHTML) : ""}</div>
                             </div>
                             :
                             <>
@@ -217,14 +218,16 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
                     }
                 </Space>
             </div>
-            {(!issue?.id && issue?.repository.id)?"":onEdit?"":<StatusWrapper>
+            {(!issue?.id && issue?.repository.id)?"":onEdit?"":<StatusWrapper className={style.statusContainer}>
                 <Spin size="small" spinning={changeQuery.loading || addQuery.loading} style={{ marginRight: "5px" }} />
                 <Radio.Group defaultValue={current?.name} onChange={onChange} buttonStyle="solid" size="small" disabled={changeQuery.loading || addQuery.loading}>
                     <Radio.Button value="Open">Open</Radio.Button>
                     <Radio.Button value="In_Progress">In Progress</Radio.Button>
                     <Radio.Button value="Done">Done</Radio.Button>
                 </Radio.Group>
-            </StatusWrapper>}
+                <div className={style.corner}></div>
+            </StatusWrapper>
+            }
 
         </Modal>
     )
@@ -233,7 +236,5 @@ const IssueModel = ({ State, goBack, issue, refetchIssue, labels }: prop) => {
 
 const StatusWrapper = styled.div`
     position: absolute;
-    top:20px;
-    right:50px
 `
 export default (IssueModel) 

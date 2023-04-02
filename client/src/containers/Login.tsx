@@ -12,10 +12,7 @@ const Login = () => {
     const redirect_uri = env.REDIRECT_URL
     const authUrl = `https://github.com/login/oauth/authorize?scope=user repo&client_id=${client_id}&redirect_uri=${redirect_uri}&prompt=select_account`
     console.log("render")
-    
-    useEffect(()=>{
-        createState()
-    },[])
+    const clientState = createState()
     const url = window.location.href;
     if (url.includes("?code=")) {
         UserLogin()
@@ -23,7 +20,7 @@ const Login = () => {
         
     }
     return (
-        <LoginPage/>
+        <LoginPage clientState={clientState}/>
     )
 }
 export default Login

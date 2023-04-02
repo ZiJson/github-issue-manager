@@ -1,0 +1,108 @@
+.statusContainer {
+    top: 20px;
+    right: 50px
+}
+
+.textContainer {
+    width: fit-content;
+    display: inline-block;
+}
+
+.textContainer p {
+    margin: 10px 0;
+    border-right: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+}
+
+.line1 {
+    animation: typing;
+    animation-duration: 1.5s;
+    animation-timing-function: steps(30, end);
+    animation-fill-mode: forwards;
+}
+
+.line2 {
+    animation: typing;
+    animation-delay: 1s;
+    animation-duration: 1.5s;
+    animation-timing-function: steps(30, end);
+    animation-fill-mode: forwards;
+}
+
+.line3 {
+    animation: typing;
+    animation-delay: 2.5s;
+    animation-duration: 1.5s;
+    animation-timing-function: steps(30, end);
+    animation-fill-mode: forwards;
+}
+
+.line4 {
+    animation: typing;
+    animation-delay: 4s;
+    animation-duration: 1.5s;
+    animation-timing-function: steps(30, end);
+    animation-fill-mode: forwards;
+}
+
+.line5 {
+    animation: typing;
+    animation-delay: 5.5s;
+    animation-duration: 1.5s;
+    animation-timing-function: steps(30, end);
+    animation-fill-mode: forwards;
+}
+
+.line6 {
+    animation: typing;
+    animation-delay: 7s;
+    animation-duration: 1.5s;
+    animation-timing-function: steps(30, end);
+    animation-fill-mode: forwards;
+}
+
+.flexText {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 400px;
+}
+
+
+@keyframes typing {
+    0% {
+        border-right: 2px solid;
+        width: 0
+    }
+
+    98% {
+        border-right: 2px solid;
+        width: 100%
+    }
+
+    100% {
+        border-right: 0;
+        width: 100%
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .statusContainer {
+        border-radius: 8px;
+        padding: 8px;
+        padding-bottom: 15px;
+        top: -35px;
+        right: 0;
+        background-color: white;
+    }
+    .flexText {
+        display: none;
+    }
+
+    .wrapper {
+        justify-content: flex-start;
+    }
+
+}

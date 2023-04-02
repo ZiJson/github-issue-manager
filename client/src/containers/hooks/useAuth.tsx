@@ -50,11 +50,10 @@ export const useAuth = () => {
             .catch(error => { throw error })
     };
 
-    const createState = () => {
+    const createState = ():string => {
         const clientState = localStorage.getItem(LOCAL_STORAGE_KEY.state)
-        console.log(clientState)
-        if (clientState) return
-        localStorage.setItem(LOCAL_STORAGE_KEY.state, nanoid())
+        if (clientState === null) localStorage.setItem(LOCAL_STORAGE_KEY.state, nanoid())
+        return localStorage.getItem(LOCAL_STORAGE_KEY.state) as string
     }
 
     return { UserLogin, UserLogout, isLogin, createState }
