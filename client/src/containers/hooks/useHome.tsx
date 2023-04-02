@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { GET_REPOS, GET_USER, SEARCH } from "../../graphql/queries";
-import { PageInfo, User, Maybe } from "../../__generated__/graphql";
+import { Maybe } from "../../__generated__/graphql";
 import { CREATE_LABEL } from "../../graphql/mutations/Label";
 import { GET_LABELS } from "../../graphql/queries/GetLabels";
 import { useApolloClient } from "@apollo/client";
 import { REPO, ISSUE, LABEL, ShowType, LabelColor, USER, PATH_NAME } from "../../constant";
 import { useNavigate } from "react-router-dom";
-import { type } from "@testing-library/user-event/dist/type";
 
 export const useHome = () => {
     const [repos, setRepos] = useState<{ datas: REPO[], cursor: Maybe<string> | undefined, type: "repos" }>({ datas: [], cursor: null, type: "repos" })
@@ -145,7 +144,7 @@ export const useHome = () => {
             scrollToTop()
         }
         else if (State === ShowType.issuesList && onSearch) {
-            refetchIssues(true).then(() =>{
+            refetchIssues(true).then(() => {
                 setSearchInput("")
                 setOnSearch(false)
             })
@@ -217,9 +216,9 @@ export const useHome = () => {
         })
     }
 
-    const refetchIssues = async (force?:boolean) => {
-        if(onSearch&&!force){
-            SearchByContent(searchInput,"ISSUE")
+    const refetchIssues = async (force?: boolean) => {
+        if (onSearch && !force) {
+            SearchByContent(searchInput, "ISSUE")
             return
         }
         const query = `repo:${issues.repo} is:issue is:open ${issues.filter === 'All' ? "" : "label:" + issues.filter} sort:created-${sortDirect}`
@@ -254,5 +253,5 @@ export const useHome = () => {
     }
 
     const State = issue?.repository.nameWithOwner ? ShowType.issueInfo : issues.loaded ? ShowType.issuesList : ShowType.reposList
-    return { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels, SearchByContent, onSearch, searchLoading, sortDirect, setSortDirect, setSearchInput }
+    return { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels, onSearch, searchLoading, sortDirect, setSortDirect, setSearchInput }
 }

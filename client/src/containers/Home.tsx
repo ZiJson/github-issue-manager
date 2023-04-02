@@ -1,34 +1,32 @@
-import { Button, Typography, Divider, List, Skeleton, Tooltip, Select, Tag, Space, Input, message } from "antd";
+import { Button, Typography, Tooltip, Select, Space, Input, message } from "antd";
 import { SwapLeftOutlined, VerticalAlignTopOutlined, AppstoreAddOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAuth, useHome } from "./hooks";
 import { Loading } from "../components/Loading";
-import { REPO, ISSUE, ShowType } from "../constant";
+import { ISSUE, ShowType } from "../constant";
 import IssueModel from "../components/IssueModel";
 import style from "./containers.module.css"
+import ScrollList from "../components/ScrollList";
 
 const Home = () => {
     const { UserLogout } = useAuth()
-    const { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels, SearchByContent, onSearch, searchLoading, sortDirect, setSortDirect, setSearchInput } = useHome()
+    const { repos, getMoreRepos, queryUser, issues, getMoreIssues, getIssueInfo, issue, goBack, State, scrollToTop, handleFilter, refetchIssues, OncreateIssue, labels, onSearch, searchLoading, sortDirect, setSortDirect, setSearchInput } = useHome()
     if (queryUser.loading) return <Loading />
 
     console.log("Home render")
     // console.log("repos:",repos)
     // console.log("issues:", issues)
     const dataList = State === ShowType.reposList ? repos : issues
-    const loadData = () => {
+    const loadData = async () => {
         State === ShowType.reposList ? getMoreRepos() : getMoreIssues(issues.repo)
     }
     const onRepoClick = async (e: any) => {
         await getMoreIssues(e.target.id)
         scrollToTop()
     }
-    const onIssueClick = (e: any) => {
+    const onIssueClick = async (e: any) => {
         getIssueInfo(e.target.id)
     }
-    const StateFilter = (datas: ISSUE[]) => {
-        return datas.filter(data => data.state === "OPEN")
-    }
+
     const onSearchEnter = (value: string) => {
         if (!value) {
             message.warning("Hey! Type anything!")
@@ -66,56 +64,10 @@ const Home = () => {
                 </Space>
             </div>
 
+            <ScrollList dataList={dataList} State={State} onItemClick={State === ShowType.reposList ? onRepoClick : onIssueClick} loadData={loadData} />
 
-
-            <div
-                id="scrollableDiv"
-                className={style.scrollDiv}
-            >
-                <InfiniteScroll
-                    dataLength={dataList.datas.length}
-                    next={loadData}
-                    hasMore={dataList.cursor ? true : false}
-                    loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-                    endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
-                    scrollableTarget="scrollableDiv"
-                >
-                    {State === ShowType.reposList ?
-                        <>
-                            <div className="scrollToTop"></div>
-                            <List
-                                dataSource={dataList.datas as REPO[]}
-                                renderItem={(item) => (
-                                    <List.Item key={item.id}>
-                                        <List.Item.Meta
-                                            title={<Typography.Text onClick={onRepoClick}><a id={item.nameWithOwner}>{item.name}</a></Typography.Text>}
-                                            description={<a className={style.link} href={item.url}>{item.url}</a>}
-                                        />
-                                    </List.Item>
-                                )}
-                            />
-                        </> :
-                        <>
-                            <div className="scrollToTop"></div>
-                            <List
-                                dataSource={StateFilter(dataList.datas as ISSUE[])}
-                                renderItem={(item) => (
-                                    <List.Item key={item.id}>
-                                        <List.Item.Meta
-                                            title={<Typography.Text onClick={onIssueClick} ><a id={item.id}>{item.title}</a></Typography.Text>}
-                                            description={<a className={style.link} href={item.url}>{item.url}</a>}
-                                        />
-                                        <div className={style.tags}
-                                        >
-                                            {item.labels.nodes.map(label => (<Tag key={label.id} style={{width:"fit-content"}} color={"#" + label.color}>{label.name}</Tag>))}
-                                        </div>
-                                    </List.Item>
-                                )}
-                            />
-                        </>}
-                </InfiniteScroll>
-            </div>
             <IssueModel State={State} goBack={goBack} issue={issue as ISSUE} refetchIssue={refetchIssues} labels={labels} />
+
             <div className={style.footer}>
                 <div>
                     <Button onClick={() => goBack()} icon={<SwapLeftOutlined />} type="text" style={{ display: onSearch ? "" : State === ShowType.reposList ? "none" : "" }}>return</Button>

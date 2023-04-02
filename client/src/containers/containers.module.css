@@ -12,19 +12,8 @@
     align-items: center;
 }
 
-.scrollDiv {
-    border-radius: 10px;
-    height: 80%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 0 16px;
-    background:rgb(255 255 255 / 18%)
-}
 
-.link {
-    color: rgba(0, 0, 0, 0.45);
-    font-size: 18px;
-}
+
 
 @media only screen and (max-width: 600px) {
     .header {
@@ -46,15 +35,6 @@
         align-items: center;
     }
     
-    .scrollDiv {
-        margin-top: 15px;
-        border-radius: 10px;
-        height: 60vh;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding: 0 16px;
-        background:rgb(255 255 255 / 18%)
-    }
     .logout {
         position: absolute;
         top :0;
