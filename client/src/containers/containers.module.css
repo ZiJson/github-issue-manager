@@ -1,14 +1,12 @@
 .header {
-    height: 30px;
-    margin-bottom: 10px;
+    height: 10%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .footer {
-    height: 30px;
-    margin-bottom: 10px;
+    height: 10%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -16,10 +14,56 @@
 
 .scrollDiv {
     border-radius: 10px;
-    height: 300px;
+    height: 80%;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 0 16px;
-    margin-bottom: 5px;
     background:rgb(255 255 255 / 18%)
+}
+
+.link {
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 18px;
+}
+
+@media only screen and (max-width: 600px) {
+    .header {
+        margin-top: 10px;
+        height: 10vh;
+        display: flex;
+        flex-direction: column;
+        justify-content:flex-start;
+        align-items:flex-start;
+        position: relative;
+        row-gap: 20px;
+    }
+    
+    .footer {
+        margin-top: 20px;
+        height: 10%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .scrollDiv {
+        margin-top: 15px;
+        border-radius: 10px;
+        height: 60vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 0 16px;
+        background:rgb(255 255 255 / 18%)
+    }
+    .logout {
+        position: absolute;
+        top :0;
+        right: 0;
+    }
+    .tags {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        gap: 3px;
+    }
 }

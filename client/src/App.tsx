@@ -20,10 +20,11 @@ function App() {
     }
   ]);
   const Screen = styled.div`
-    width : 500px;
-    height : 370px;
+    width : 50vw;
+    aspect-ratio : 5/4;
+    min-width : 600px;
     margin : auto;
-    margin-top : 60px;
+    margin-top : 10vh;
     background : #dbe9ee;
     border-radius : 20px;
     border : solid 10px #c0d6df;

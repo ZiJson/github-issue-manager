@@ -6,7 +6,12 @@ dotenv.config();
 
 const app: Express = express();
 const port = 4000;
-app.use(cors())
+const allowedOrigins = ['http://localhost:3000'];
+
+const options: cors.CorsOptions = {
+  origin: "*"
+};
+app.use(cors(options))
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: "text/*" }));
 app.use(bodyParser.urlencoded({ extended: false }));

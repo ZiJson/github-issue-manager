@@ -1,5 +1,5 @@
 import { Button, Typography, Divider, List, Skeleton, Tooltip, Select, Tag, Space, Input, message } from "antd";
-import { SwapLeftOutlined, VerticalAlignTopOutlined, AppstoreAddOutlined ,ArrowUpOutlined ,ArrowDownOutlined} from '@ant-design/icons';
+import { SwapLeftOutlined, VerticalAlignTopOutlined, AppstoreAddOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAuth, useHome } from "./hooks";
 import { Loading } from "../components/Loading";
@@ -39,12 +39,11 @@ const Home = () => {
     return (
         <>
             <div className={style.header}>
-                <Typography.Text strong>Hello <Typography.Link href={queryUser.data?.viewer.url} >{queryUser.data?.viewer.login}</Typography.Link> !</Typography.Text>
-                <Space>
+                <Typography.Text strong >Hello <Typography.Link href={queryUser.data?.viewer.url} >{queryUser.data?.viewer.login}</Typography.Link> !</Typography.Text>
+                <Space align="end" style={{ width: "auto", justifyContent: "end" }}>
                     {(State === ShowType.issuesList || State === ShowType.issueInfo) && !onSearch ?
                         <>
                             <Select
-                                size="small"
                                 labelInValue
                                 defaultValue={{ value: "all", label: "All" }}
                                 style={{ width: 120 }}
@@ -57,11 +56,11 @@ const Home = () => {
                                 ]}
                             />
                         </> : ""}
-                    <Input.Search placeholder="input search text" style={{ width: 150 }} size="small" onSearch={onSearchEnter} loading={searchLoading}></Input.Search>
-                    <Tooltip title={sortDirect==="ASC"?"start from old":"start from new"}>
-                    <Button type="text" size="small" onClick={()=>{setSortDirect(sortDirect==="ASC"?"DESC":"ASC")}} icon={<ArrowDownOutlined />}><sup style={{fontWeight:"600"}}>{sortDirect==="ASC"?"O":"N"}</sup></Button>
+                    <Input.Search placeholder="input search text" style={{ width: 150 }} onSearch={onSearchEnter} loading={searchLoading}></Input.Search>
+                    <Tooltip title={sortDirect === "ASC" ? "start from old" : "start from new"}>
+                        <Button type="text" size="small" onClick={() => { setSortDirect(sortDirect === "ASC" ? "DESC" : "ASC") }} icon={<ArrowDownOutlined />}><sup style={{ fontWeight: "600" }}>{sortDirect === "ASC" ? "O" : "N"}</sup></Button>
                     </Tooltip>
-                    <Button type="primary" size="small" onClick={() => {
+                    <Button type="primary" className={style.logout} onClick={() => {
                         UserLogout()
                     }}>Logout</Button>
                 </Space>
@@ -90,7 +89,7 @@ const Home = () => {
                                     <List.Item key={item.id}>
                                         <List.Item.Meta
                                             title={<Typography.Text onClick={onRepoClick}><a id={item.nameWithOwner}>{item.name}</a></Typography.Text>}
-                                            description={item.url}
+                                            description={<a className={style.link} href={item.url}>{item.url}</a>}
                                         />
                                     </List.Item>
                                 )}
@@ -104,9 +103,12 @@ const Home = () => {
                                     <List.Item key={item.id}>
                                         <List.Item.Meta
                                             title={<Typography.Text onClick={onIssueClick} ><a id={item.id}>{item.title}</a></Typography.Text>}
-                                            description={item.url}
+                                            description={<a className={style.link} href={item.url}>{item.url}</a>}
                                         />
-                                        {item.labels.nodes.map(label => (<Tag key={label.id} color={"#" + label.color}>{label.name}</Tag>))}
+                                        <div className={style.tags}
+                                        >
+                                            {item.labels.nodes.map(label => (<Tag key={label.id} style={{width:"fit-content"}} color={"#" + label.color}>{label.name}</Tag>))}
+                                        </div>
                                     </List.Item>
                                 )}
                             />

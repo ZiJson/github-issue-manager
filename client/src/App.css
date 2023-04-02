@@ -44,6 +44,7 @@
   .screen {
     border :0 !important;
     width: auto !important;
+    min-width: 0 !important;
     margin: 0 !important;
   }
 }
