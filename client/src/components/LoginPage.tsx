@@ -53,7 +53,7 @@ const LoginPage = ({ clientState }: { clientState: string }) => {
                 </p>
             </div>
             </div>
-            <Button type="primary" href={authUrl} style={{margin:"20px 0"}}>go Login</Button>
+            <Button type="primary" href={authUrl} style={{margin:"20px 0"}}>Login</Button>
         </Wrapper>
     )
 
