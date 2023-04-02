@@ -70,6 +70,19 @@
     width: 400px;
 }
 
+.link {
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 18px;
+}
+
+.scrollDiv {
+    border-radius: 10px;
+    height: 80%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 16px;
+    background:rgb(255 255 255 / 18%)
+}
 
 @keyframes typing {
     0% {
@@ -89,6 +102,17 @@
 }
 
 @media only screen and (max-width: 600px) {
+
+
+    .scrollDiv {
+        margin-top: 15px;
+        border-radius: 10px;
+        height: 60vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 0 16px;
+        background:rgb(255 255 255 / 18%)
+    }
     .statusContainer {
         border-radius: 8px;
         padding: 8px;

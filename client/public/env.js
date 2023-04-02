@@ -42,7 +42,7 @@ window.env = {
   "npm_execpath": "/Users/linzijie/.nvm/versions/node/v18.15.0/lib/node_modules/yarn/bin/yarn.js",
   "npm_package_dependencies_graphql": "^16.6.0",
   "npm_package_devDependencies__graphql_codegen_cli": "^3.2.1",
-  "PATH": "/var/folders/d7/v781yx5d163_2j25mmfqksd40000gn/T/yarn--1680413231990-0.01689025570686198:/Users/linzijie/Desktop/github-issue-manager/client/node_modules/.bin:/Users/linzijie/.config/yarn/link/node_modules/.bin:/Users/linzijie/.nvm/versions/node/v18.15.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/Users/linzijie/.nvm/versions/node/v18.15.0/lib/node_modules/npm/bin/node-gyp-bin:/Users/linzijie/.nvm/versions/node/v18.15.0/bin/node_modules/npm/bin/node-gyp-bin:/var/folders/d7/v781yx5d163_2j25mmfqksd40000gn/T/yarn--1680413231742-0.7805589430862543:/Users/linzijie/Desktop/github-issue-manager/node_modules/.bin:/Users/linzijie/.config/yarn/link/node_modules/.bin:/Users/linzijie/.yarn/bin:/Users/linzijie/.nvm/versions/node/v18.15.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/Users/linzijie/.nvm/versions/node/v18.15.0/lib/node_modules/npm/bin/node-gyp-bin:/Users/linzijie/.nvm/versions/node/v18.15.0/bin/node_modules/npm/bin/node-gyp-bin:/Users/linzijie/.nvm/versions/node/v18.15.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/linzijie/.nvm/versions/node/v18.15.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin",
+  "PATH": "/var/folders/d7/v781yx5d163_2j25mmfqksd40000gn/T/yarn--1680436826470-0.12133709281581884:/Users/linzijie/Desktop/github-issue-manager/client/node_modules/.bin:/Users/linzijie/.config/yarn/link/node_modules/.bin:/Users/linzijie/.nvm/versions/node/v18.15.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/Users/linzijie/.nvm/versions/node/v18.15.0/lib/node_modules/npm/bin/node-gyp-bin:/Users/linzijie/.nvm/versions/node/v18.15.0/bin/node_modules/npm/bin/node-gyp-bin:/var/folders/d7/v781yx5d163_2j25mmfqksd40000gn/T/yarn--1680436826294-0.9852535510065206:/Users/linzijie/Desktop/github-issue-manager/node_modules/.bin:/Users/linzijie/.config/yarn/link/node_modules/.bin:/Users/linzijie/.yarn/bin:/Users/linzijie/.nvm/versions/node/v18.15.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/Users/linzijie/.nvm/versions/node/v18.15.0/lib/node_modules/npm/bin/node-gyp-bin:/Users/linzijie/.nvm/versions/node/v18.15.0/bin/node_modules/npm/bin/node-gyp-bin:/Users/linzijie/.nvm/versions/node/v18.15.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/linzijie/.nvm/versions/node/v18.15.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin",
   "npm_config_argv": "{\"remain\":[],\"cooked\":[\"run\",\"start\"],\"original\":[\"start\"]}",
   "_": "/Users/linzijie/Desktop/github-issue-manager/client/node_modules/.bin/react-dotenv",
   "__CFBundleIdentifier": "com.microsoft.VSCode",
@@ -110,9 +110,5 @@ window.env = {
   "npm_package_dependencies__types_react_dom": "^18.0.0",
   "COLORTERM": "truecolor",
   "npm_node_execpath": "/Users/linzijie/.nvm/versions/node/v18.15.0/bin/node",
-  "npm_config_version_tag_prefix": "v",
-  "CLIENT_ID": "5be4378b022a2767ca9a",
-  "CLIENT_SECRET": "2404f206d898005c824a1c24755443d9daa51602",
-  "PROXY_SERVER": "http://localhost:4000/authenticate",
-  "REDIRECT_URL": "http://localhost:3000/login"
+  "npm_config_version_tag_prefix": "v"
 };
