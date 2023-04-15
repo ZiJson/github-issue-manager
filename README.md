@@ -1,4 +1,5 @@
-# github-issue-manager https://project.zijason.site/login
+# github-issue-manager https://project.zijason.site/
+
 
 
 ## Information
