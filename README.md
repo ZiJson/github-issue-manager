@@ -1,4 +1,7 @@
-# github-issue-manager https://project.zijason.site/
+# github-issue-manager 
+
+## Screen Shot
+![main](https://github.com/ZiJson/github-issue-manager/assets/108473055/260b9570-2895-4a9b-9861-9aec2cfb6bc8)
 
 
 
