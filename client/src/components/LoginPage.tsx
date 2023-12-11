@@ -9,7 +9,7 @@ const LoginPage = ({ clientState }: { clientState: string }) => {
     const client_id = env.CLIENT_ID
     const redirect_uri = env.REDIRECT_URL
     const authUrl = `https://github.com/login/oauth/authorize?scope=user repo admin:org&state=${clientState}&client_id=${client_id}&redirect_uri=${redirect_uri}&prompt=consent`
-
+    console.log(authUrl)
 
     return (
         <Wrapper className={style.wrapper}>
