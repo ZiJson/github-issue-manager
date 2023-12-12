@@ -30,8 +30,8 @@ Features :
 
 client/ .env
 ```
-CLIENT_ID='5be4378b022a2767ca9a'                          // for GitHub OAuth App 
-CLIENT_SECRET='2404f206d898005c824a1c24755443d9daa51602'  // for GitHub OAuth App, you can put your own
+CLIENT_ID='5be43********67ca9a'                          // client ID for GitHub OAuth App 
+CLIENT_SECRET='2404f206d*********24755443d9daa51602'  // client secret for GitHub OAuth App, you can put your own
 PROXY_SERVER='http://localhost:4000/authenticate'
 REDIRECT_URL='http://localhost:3000/login'
 ```
